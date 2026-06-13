@@ -1,0 +1,216 @@
+  <div class="titulo">{{ modoEdicao ? 'Substituir sala rejeitada do evento' : 'Reservar sala/recurso para evento' }}</div>
+
+  <div class="quadrado evento-card">
+    <div class="edicao-aviso" *ngIf="modoEdicao && reservaRejeitada">
+      <div>
+        <strong>Sala rejeitada: {{ reservaRejeitada.sala }}</strong>
+        <span>{{ reservaRejeitada.data | date:'dd/MM/yyyy' }} - {{ reservaRejeitada.horaInicio }} / {{ reservaRejeitada.horaFim }}</span>
+      </div>
+      <span class="status-rejeitada">REJEITADA</span>
+    </div>
+
+    <section class="salas-aprovadas" *ngIf="modoEdicao && salasAprovadas.length">
+      <div class="secao-titulo">Salas já aprovadas</div>
+      <div class="salas-aprovadas-grid">
+        <article class="sala-aprovada-card" *ngFor="let reserva of salasAprovadas">
+          <div>
+            <strong>{{ reserva.sala }}</strong>
+            <span>{{ reserva.data | date:'dd/MM/yyyy' }} - {{ reserva.horaInicio }} / {{ reserva.horaFim }}</span>
+          </div>
+          <span class="status-aprovada">APROVADA</span>
+        </article>
+      </div>
+    </section>
+
+    <div class="evento-form">
+      <div class="field full">
+        <label class="form-label">Nome do evento</label>
+        <input class="campo" type="text" [(ngModel)]="evento.nome" [disabled]="modoEdicao">
+      </div>
+
+      <div class="field full">
+        <label class="form-label">Observações sobre o evento</label>
+        <textarea class="campo event-notes" [(ngModel)]="evento.observacoes" [disabled]="modoEdicao"></textarea>
+      </div>
+
+      <div class="field full">
+        <label class="form-label">Salas do evento</label>
+        <div class="sala-selector">
+          <select class="campo" [(ngModel)]="evento.salaSelecionadaId" (change)="adicionarSala()">
+            <option [ngValue]="null">
+              {{ modoEdicao ? 'Selecione uma sala disponível' : 'Selecione uma sala' }}
+            </option>
+            <option *ngFor="let sala of salasDisponiveis" [ngValue]="sala.id" [disabled]="salaJaSelecionada(sala.id)">
+              {{ sala.nome }}
+            </option>
+          </select>
+          <button class="btSecundario" type="button" [disabled]="!evento.salaSelecionadaId" (click)="adicionarSala()">
+            Adicionar
+          </button>
+        </div>
+
+        <div class="salas-tabs" *ngIf="evento.salas.length > 0">
+          <button
+            class="sala-tab"
+            type="button"
+            *ngFor="let sala of evento.salas"
+            [class.ativa]="evento.salaAtivaId === sala.id"
+            (click)="selecionarSala(sala.id)">
+            {{ sala.nome }}
+            <span type="button" class="sala-tab-remover" (click)="removerSala(sala.id); $event.stopPropagation()" [attr.aria-label]="'Remover ' + sala.nome">x</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field full salas-configuracao" *ngIf="salaAtiva as sala">
+        <div class="sala-config-card">
+          <div class="sala-config-header">
+            <div>
+              <div class="sala-config-title">{{ sala.nome }}</div>
+            </div>
+            <button class="btSecundario sala-remover" type="button" (click)="removerSala(sala.id)">Remover</button>
+          </div>
+
+          <div class="sala-config-grid">
+            <div class="field agenda-panel">
+              <label class="form-label">Dia e horário</label>
+              <div class="agenda-grid">
+                <div>
+                  <span class="mini-label">Dia</span>
+                  <input class="campo" type="date" [(ngModel)]="sala.data" (ngModelChange)="atualizarDisponibilidadeRecursosSala(sala)">
+                </div>
+                <div>
+                  <span class="mini-label">Início</span>
+                  <input class="campo" type="time" [(ngModel)]="sala.horaInicio" (ngModelChange)="atualizarDisponibilidadeRecursosSala(sala)">
+                </div>
+                <div>
+                  <span class="mini-label">Fim</span>
+                  <input class="campo" type="time" [(ngModel)]="sala.horaFim" (ngModelChange)="atualizarDisponibilidadeRecursosSala(sala)">
+                </div>
+                <div>
+                  <span class="mini-label">Participantes</span>
+                  <input
+                    class="campo"
+                    type="number"
+                    min="1"
+                    [max]="sala.capacidade"
+                    [(ngModel)]="sala.quantidadeParticipantes"
+                    (ngModelChange)="ajustarQuantidadeParticipantesSala(sala)"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="field resources-panel">
+              <label class="form-label">Recursos</label>
+              <div class="recursos-evento-list">
+                <div class="recurso-evento-item" *ngFor="let recurso of recursosDaSala(sala)">
+                  <div class="recurso-identificacao">
+                    <label class="chip">
+                      <input
+                        type="checkbox"
+                        [disabled]="quantidadeMaximaRecursoSala(sala, recurso) <= 0"
+                        (change)="alternarRecursoSala(sala, recurso.id, $any($event.target).checked)">
+                      {{ recurso.nome }}
+                    </label>
+                    <span>Tipo: {{ recurso.tipo || 'Não informado' }}</span>
+                    <small>{{ recurso.descricao || 'Sem descrição' }}</small>
+                  </div>
+
+                  <div class="recurso-quantidade" *ngIf="recursoSelecionadoSala(sala, recurso.id)">
+                    <span>{{ disponibilidadeLabelSala(sala, recurso) }}</span>
+                    <input
+                      class="campo"
+                      type="number"
+                      min="1"
+                      [max]="quantidadeMaximaRecursoSala(sala, recurso)"
+                      [(ngModel)]="sala.recursoQuantidades[recurso.id]"
+                      (keydown)="bloquearQuantidadeMaiorSala($event, sala, recurso)"
+                      (paste)="bloquearColagemQuantidadeSala($event, sala, recurso)"
+                      (input)="validarQuantidadeRecursoSala(sala, recurso)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field cadeiras-panel">
+              <div class="cadeiras-toggle">
+                <div>
+                  <label class="form-label">Cadeiras extras</label>
+                  <div class="boolean-hint">{{ sala.cadeirasExtras ? 'Adicionar cadeiras nesta sala' : 'Sem cadeiras adicionais' }}</div>
+                </div>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="sala.cadeirasExtras"
+                    (ngModelChange)="atualizarCadeirasExtrasSala(sala)"
+                  >
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div>
+                <label class="form-label">Quantas cadeiras?</label>
+                <input
+                  class="campo"
+                  type="number"
+                  min="1"
+                  [(ngModel)]="sala.quantidadeCadeiras"
+                  [disabled]="!sala.cadeirasExtras"
+                  (ngModelChange)="ajustarQuantidadeCadeirasSala(sala)"
+                >
+              </div>
+            </div>
+
+            <div class="field responsavel-panel">
+              <div class="responsavel-toggle">
+                <div>
+                  <label class="form-label">Você é o responsável?</label>
+                  <div class="boolean-hint">{{ sala.souResponsavel ? 'Usar usuário logado nesta sala' : 'Informar outro responsável' }}</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" [(ngModel)]="sala.souResponsavel">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="responsavel-nome">
+                <label class="form-label">Nome do responsável</label>
+                <input class="campo" type="text" [(ngModel)]="sala.responsavel" [disabled]="sala.souResponsavel">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="containerBotao evento-actions">
+      <button class="btEfetivar" (click)="agendar()">
+        {{ modoEdicao ? 'Enviar substituição' : 'Agendar' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="modalJustificativaAberto">
+    <div class="modal justificativa-modal">
+      <div>
+        <h2>Motivo do agendamento</h2>
+        <p>
+          Explique para o administrador por que este evento precisa utilizar
+          {{ evento.salas.length }} sala{{ evento.salas.length === 1 ? '' : 's' }}.
+        </p>
+      </div>
+
+      <textarea
+        class="campo justificativa-campo"
+        [(ngModel)]="justificativaAgendamento"
+        placeholder="Ex.: Semana acadêmica com palestras simultâneas, oficinas em laboratórios e recepção no auditório.">
+      </textarea>
+
+      <div class="justificativa-acoes">
+        <button class="btSecundario" type="button" (click)="cancelarJustificativa()">Cancelar</button>
+        <button class="btEfetivar" type="button" (click)="confirmarAgendamento()">Enviar agendamento</button>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,21 @@
+  <div class="titulo">Cadastrar sala</div>
+
+  <div class="quadrado">
+    <div class="form-grid">
+      <div>
+        <label class="texto">Nome</label>
+        <input class="campo" type="text" [(ngModel)]="sala.nome" (input)="limparMensagens()">
+      </div>
+
+      <div>
+        <label class="texto">Capacidade</label>
+        <input class="campo" type="number" min="1" [(ngModel)]="sala.capacidade" (input)="limparMensagens()">
+      </div>
+    </div>
+
+    <div class="containerBotao">
+      <button class="btEfetivar" (click)="cadastrar()">
+        Cadastrar
+      </button>
+    </div>
+  </div>

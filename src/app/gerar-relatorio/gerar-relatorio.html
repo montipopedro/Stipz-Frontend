@@ -1,0 +1,29 @@
+  <div class="titulo">Gerar relatório</div>
+
+  <div class="quadrado">
+    <div class="form-grid">
+      <div>
+        <label class="form-label">Selecione a data</label>
+        <input class="campo" type="date" [(ngModel)]="filtros.dataInicio">
+      </div>
+
+      <div>
+        <label class="form-label">Até</label>
+        <input class="campo" type="date" [(ngModel)]="filtros.dataFim">
+      </div>
+
+      <div class="span-2">
+        <label class="form-label">Sala desejada</label>
+        <select class="campo" [(ngModel)]="filtros.sala">
+          <option value="">Selecione</option>
+          <option *ngFor="let sala of state.salas" [value]="sala.nome">{{ sala.nome }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="containerBotao">
+      <button class="btEfetivar" (click)="gerar()" [disabled]="carregando">
+        {{ carregando ? 'Gerando...' : 'Gerar PDF' }}
+      </button>
+    </div>
+  </div>

@@ -1,0 +1,15 @@
+<div class="login-page">
+  <div class="login-card">
+    <img src="assets/img/logo-stipz-display.png" alt="Stipz">
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="credenciais.email">
+
+    <label>Senha</label>
+    <input type="password" [(ngModel)]="credenciais.senha">
+
+    <button (click)="entrar()" [disabled]="carregando">
+      {{ carregando ? 'Entrando...' : 'Entrar' }}
+    </button>
+  </div>
+</div>

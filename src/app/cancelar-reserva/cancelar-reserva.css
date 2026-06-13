@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.reserva-selecionavel {
+  cursor: pointer;
+  outline: none;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.reserva-selecionavel:hover,
+.reserva-selecionavel:focus-visible {
+  background: rgba(70, 146, 160, 0.09);
+  border-color: rgba(79, 171, 189, 0.75);
+}
+
+.reserva-selecionavel.selecionada {
+  background: rgba(70, 146, 160, 0.14);
+  border-color: #4fabb9;
+  box-shadow: inset 4px 0 0 #4fabb9;
+}
+
+.selection-label {
+  color: #77c5d1;
+  font-size: 13px;
+  font-weight: 800;
+  margin-left: auto;
+}

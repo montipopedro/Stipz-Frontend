@@ -1,0 +1,34 @@
+  <div class="titulo">Excluir agendamentos</div>
+
+  <div class="quadrado">
+    <div *ngIf="reservasCancelaveis.length === 0" class="empty-state">
+      Você ainda não possui agendamentos
+    </div>
+
+    <div class="lista-reservas" *ngIf="reservasCancelaveis.length > 0">
+      <div
+        class="reserva-item reserva-selecionavel"
+        *ngFor="let reserva of reservasCancelaveis"
+        [class.selecionada]="selecionada?.id === reserva.id"
+        role="radio"
+        tabindex="0"
+        [attr.aria-checked]="selecionada?.id === reserva.id"
+        (click)="selecionar(reserva)"
+        (keydown.enter)="selecionar(reserva)"
+        (keydown.space)="selecionar(reserva); $event.preventDefault()"
+      >
+        <div class="reserva-icone">✓</div>
+        <div>
+          <div class="reserva-titulo">{{ reserva.sala }}</div>
+          <div class="reserva-detalhe">{{ reserva.data | date:'dd/MM/yyyy' }} - {{ reserva.horaInicio }} / {{ reserva.horaFim }}</div>
+        </div>
+        <span class="selection-label">
+          {{ selecionada?.id === reserva.id ? 'Selecionada' : 'Selecionar' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="containerBotao">
+      <button class="btPerigo" [disabled]="!selecionada" (click)="abrirConfirmacao()">Excluir</button>
+    </div>
+  </div>

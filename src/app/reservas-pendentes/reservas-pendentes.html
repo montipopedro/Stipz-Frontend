@@ -1,0 +1,67 @@
+  <div class="titulo">Reservas pendentes</div>
+
+  <div class="quadrado">
+    <div *ngIf="gruposPendentes.length === 0" class="empty-state">
+      Você ainda não possui reservas pendentes
+    </div>
+
+    <div class="lista-reservas" *ngIf="gruposPendentes.length > 0">
+      <section class="reserva-grupo" *ngFor="let grupo of gruposPendentes">
+        <header class="grupo-header" *ngIf="grupo.evento">
+          <div>
+            <div class="grupo-titulo">{{ grupo.evento }}</div>
+            <div class="reserva-detalhe">Evento com {{ grupo.reservas.length }} sala{{ grupo.reservas.length === 1 ? '' : 's' }}</div>
+          </div>
+          <div class="grupo-motivo" *ngIf="grupo.reservas[0].justificativa">
+            Motivo: {{ grupo.reservas[0].justificativa }}
+          </div>
+        </header>
+
+        <div class="reserva-linha" *ngFor="let reserva of grupo.reservas">
+          <div class="reserva-icone">i</div>
+          <div class="reserva-conteudo">
+            <div class="reserva-titulo">{{ reserva.sala }}</div>
+            <div class="reserva-detalhe">{{ reserva.data | date:'dd/MM/yyyy' }} - {{ reserva.horaInicio }} / {{ reserva.horaFim }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.solicitante">Solicitante: {{ reserva.solicitante }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.responsavel">Responsável: {{ reserva.responsavel }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.recursos.length">Recursos: {{ reserva.recursos.join(', ') }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.cadeirasExtras">
+              Cadeiras extras solicitadas: {{ reserva.quantidadeCadeiras }}
+            </div>
+          </div>
+
+          <div class="reserva-acoes">
+            <button class="btSecundario" type="button" [disabled]="processandoId === reserva.id" (click)="rejeitar(reserva)">
+              Rejeitar
+            </button>
+            <button class="btEfetivar" type="button" [disabled]="processandoId === reserva.id" (click)="aprovar(reserva)">
+              Aprovar
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="reservaParaRejeitar">
+    <div class="modal justificativa-modal">
+      <div>
+        <h2>Motivo da rejeição</h2>
+        <p>
+          Explique por que a reserva de {{ reservaParaRejeitar.sala }} será rejeitada.
+          Esse texto aparecerá para o usuário em Minhas reservas.
+        </p>
+      </div>
+
+      <textarea
+        class="campo justificativa-campo"
+        [(ngModel)]="motivoRejeicao"
+        placeholder="Ex.: Sala indisponível para manutenção neste horário.">
+      </textarea>
+
+      <div class="justificativa-acoes">
+        <button class="btSecundario" type="button" (click)="cancelarRejeicao()">Cancelar</button>
+        <button class="btPerigo" type="button" (click)="confirmarRejeicao()">Rejeitar reserva</button>
+      </div>
+    </div>
+  </div>

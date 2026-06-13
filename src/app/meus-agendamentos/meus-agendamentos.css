@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+.reserva-grupo {
+  background: #f8fbfc;
+  border: 1px solid #dce9ec;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+.grupo-header {
+  border-bottom: 1px solid #dce9ec;
+  padding: 8px 4px 12px;
+}
+
+.grupo-titulo {
+  color: #172326;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.reserva-linha {
+  align-items: center;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  padding: 14px 4px;
+}
+
+.reserva-linha + .reserva-linha {
+  border-top: 1px solid #dce9ec;
+}
+
+.reserva-status {
+  font-weight: 700;
+}
+
+.reserva-acoes {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btEditarReserva {
+  background: #18343d;
+  border: 1px solid #3f8797;
+  border-radius: 6px;
+  color: #9eddec;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  min-height: 38px;
+  padding: 0 16px;
+}
+
+.btEditarReserva:hover {
+  background: #214650;
+}
+
+.confirmar-edicao-modal {
+  max-width: 520px;
+  text-align: left;
+}
+
+.confirmar-edicao-modal h2,
+.confirmar-edicao-modal p {
+  margin: 0;
+}
+
+.confirmar-edicao-modal {
+  display: grid;
+  gap: 16px;
+}
+
+.modal-hint {
+  color: #6a7f84;
+  font-size: 14px;
+}
+
+.modal-acoes {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+:host-context(.dark-mode) .reserva-grupo {
+  background: #101d21;
+  border-color: #294047;
+}
+
+:host-context(.dark-mode) .grupo-header,
+:host-context(.dark-mode) .reserva-linha + .reserva-linha {
+  border-color: #294047;
+}
+
+:host-context(.dark-mode) .grupo-titulo {
+  color: #f2f7f8;
+}
+
+@media (max-width: 780px) {
+  .reserva-linha {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .reserva-status {
+    grid-column: 2;
+  }
+
+  .reserva-acoes {
+    align-items: flex-start;
+    grid-column: 2;
+  }
+}

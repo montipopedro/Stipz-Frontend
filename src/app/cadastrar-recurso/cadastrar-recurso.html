@@ -1,0 +1,72 @@
+  <div class="titulo">Cadastrar recurso</div>
+
+  <div class="quadrado recurso-card">
+    <div class="recurso-form">
+      <div class="field">
+        <label class="texto">Sala</label>
+        <select class="campo" [(ngModel)]="recurso.salaId" (change)="limparMensagens()">
+          <option [ngValue]="null">Selecione</option>
+          <option *ngFor="let sala of state.salas" [ngValue]="sala.id">{{ sala.nome }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="texto">Nome do recurso</label>
+        <input class="campo" type="text" [(ngModel)]="recurso.nome" (input)="limparMensagens()">
+      </div>
+
+      <div class="field">
+        <label class="texto">Quantidade</label>
+        <input class="campo" type="number" min="1" [(ngModel)]="recurso.quantidade" (input)="limparMensagens()">
+      </div>
+
+      <div class="field field-wide">
+        <label class="texto">Descrição</label>
+        <input class="campo" type="text" [(ngModel)]="recurso.descricao" (input)="limparMensagens()">
+      </div>
+
+      <div class="field">
+        <label class="texto">Categoria</label>
+        <select class="campo" [(ngModel)]="recurso.categoria" (change)="limparMensagens()">
+          <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+
+      <div class="field boolean-field">
+        <div>
+          <label class="texto">É fixo?</label>
+          <div class="boolean-hint">{{ recurso.fixo ? 'Recurso fixo na sala' : 'Recurso móvel' }}</div>
+        </div>
+
+        <label class="switch boolean-switch">
+          <input type="checkbox" [(ngModel)]="recurso.fixo" (change)="limparMensagens()">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="containerBotao recurso-actions">
+      <button class="btEfetivar" (click)="cadastrar()">
+        Cadastrar
+      </button>
+    </div>
+
+    <div class="recursos-resumo" *ngIf="state.recursos.length > 0">
+      <div class="resumo-titulo">Recursos cadastrados</div>
+
+      <div class="recurso-resumo-item" *ngFor="let item of state.recursos">
+        <div>
+          <div class="recurso-resumo-nome">{{ item.nome }}</div>
+          <div class="recurso-resumo-tipo">Tipo: {{ item.tipo || 'Não informado' }}</div>
+          <div class="recurso-resumo-descricao">Descrição: {{ item.descricao || 'Não informada' }}</div>
+          <div class="recurso-resumo-sala">{{ item.sala || 'Sem sala vinculada' }}</div>
+        </div>
+
+        <div class="recurso-metricas">
+          <span>Total: {{ item.quantidade }}</span>
+          <span>Reservados: {{ quantidadeReservada(item) }}</span>
+          <span>Disponíveis: {{ quantidadeDisponivel(item) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>

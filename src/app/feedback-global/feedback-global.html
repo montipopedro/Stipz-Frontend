@@ -1,0 +1,36 @@
+<div class="feedback-overlay mensagem-overlay" *ngIf="feedback.mensagem$ | async as aviso">
+  <section class="feedback-popup" [class]="'feedback-popup ' + aviso.tipo" role="alert">
+    <div class="feedback-icone">
+      <span *ngIf="aviso.tipo === 'sucesso'">✓</span>
+      <span *ngIf="aviso.tipo === 'erro'">!</span>
+      <span *ngIf="aviso.tipo === 'aviso'">!</span>
+      <span *ngIf="aviso.tipo === 'info'">i</span>
+    </div>
+    <div class="feedback-conteudo">
+      <h2>{{ aviso.titulo }}</h2>
+      <p *ngFor="let mensagem of aviso.mensagens">{{ mensagem }}</p>
+    </div>
+    <button class="feedback-fechar" type="button" (click)="feedback.fecharMensagem()" aria-label="Fechar mensagem">×</button>
+  </section>
+</div>
+
+<div class="feedback-overlay" *ngIf="feedback.confirmacao$ | async as confirmacao">
+  <section class="feedback-popup confirmacao" role="dialog" aria-modal="true">
+    <div class="feedback-icone">?</div>
+    <div class="feedback-conteudo">
+      <h2>{{ confirmacao.titulo }}</h2>
+      <p>{{ confirmacao.mensagem }}</p>
+      <div class="feedback-acoes">
+        <button class="btSecundario" type="button" (click)="feedback.responderConfirmacao(false)">
+          {{ confirmacao.textoCancelar }}
+        </button>
+        <button
+          [class]="confirmacao.perigosa ? 'btPerigo' : 'btEfetivar'"
+          type="button"
+          (click)="feedback.responderConfirmacao(true)">
+          {{ confirmacao.textoConfirmar }}
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

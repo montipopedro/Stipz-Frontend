@@ -1,0 +1,122 @@
+  <div class="titulo">Reservar sala/recurso</div>
+
+  <div class="quadrado">
+    <div class="reserva-form">
+      <div class="field full">
+        <label class="form-label">Sala desejada</label>
+        <select class="campo" [(ngModel)]="reserva.salaId" (ngModelChange)="atualizarDisponibilidadeRecursos()">
+          <option [ngValue]="null">Selecione</option>
+          <option *ngFor="let sala of state.salas" [ngValue]="sala.id">{{ sala.nome }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="form-label">Dia</label>
+        <input class="campo" type="date" [(ngModel)]="reserva.data" (ngModelChange)="atualizarDisponibilidadeRecursos()">
+      </div>
+
+      <div class="field">
+        <label class="form-label">Início</label>
+        <input class="campo" type="time" [(ngModel)]="reserva.horaInicio" (ngModelChange)="atualizarDisponibilidadeRecursos()">
+      </div>
+
+      <div class="field">
+        <label class="form-label">Fim</label>
+        <input class="campo" type="time" [(ngModel)]="reserva.horaFim" (ngModelChange)="atualizarDisponibilidadeRecursos()">
+      </div>
+
+      <div class="field">
+        <label class="form-label">Quantidade de participantes</label>
+        <input
+          class="campo"
+          type="number"
+          min="1"
+          [max]="salaSelecionada()?.capacidade || null"
+          [(ngModel)]="reserva.quantidadeParticipantes"
+          (ngModelChange)="ajustarQuantidadeParticipantes()"
+        >
+      </div>
+
+      <div class="field full">
+        <label class="form-label">Recursos</label>
+        <div class="recursos-reserva-list">
+          <div class="recurso-reserva-item" *ngFor="let recurso of recursosDisponiveis">
+            <div class="recurso-identificacao">
+              <label class="chip">
+                <input
+                  type="checkbox"
+                  [disabled]="quantidadeMaximaRecurso(recurso) <= 0"
+                  (change)="alternarRecurso(recurso.id, $any($event.target).checked)">
+                {{ recurso.nome }}
+              </label>
+              <span>Tipo: {{ recurso.tipo || 'Não informado' }}</span>
+              <small>{{ recurso.descricao || 'Sem descrição' }}</small>
+            </div>
+
+            <div class="recurso-quantidade" *ngIf="recursoSelecionado(recurso.id)">
+              <span>{{ disponibilidadeLabel(recurso) }}</span>
+              <input
+                class="campo"
+                type="number"
+                min="1"
+                [max]="quantidadeMaximaRecurso(recurso)"
+                [(ngModel)]="reserva.recursoQuantidades[recurso.id]"
+                (keydown)="bloquearQuantidadeMaior($event, recurso)"
+                (paste)="bloquearColagemQuantidade($event, recurso)"
+                (input)="validarQuantidadeRecurso(recurso)"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field full chairs-panel">
+        <div class="chairs-description">
+          <label class="form-label">Cadeiras extras?</label>
+          <span class="chairs-hint">
+            {{ reserva.cadeirasExtras ? 'Adicionar cadeiras à sala' : 'Sem cadeiras adicionais' }}
+          </span>
+        </div>
+
+        <div class="chairs-controls">
+          <label class="switch">
+            <input
+              type="checkbox"
+              [(ngModel)]="reserva.cadeirasExtras"
+              (ngModelChange)="atualizarCadeirasExtras()"
+            >
+            <span class="slider"></span>
+          </label>
+
+          <div class="chairs-quantity">
+            <label class="form-label">Quantidade de cadeiras extras</label>
+            <input
+              class="campo"
+              type="number"
+              min="1"
+              [(ngModel)]="reserva.quantidadeCadeiras"
+              [disabled]="!reserva.cadeirasExtras"
+              (ngModelChange)="ajustarQuantidadeCadeiras()"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="field responsible-toggle">
+        <label class="form-label">Você é o responsável?</label>
+        <label class="switch">
+          <input type="checkbox" [(ngModel)]="reserva.souResponsavel">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="form-label">Nome do responsável</label>
+        <input class="campo" type="text" [(ngModel)]="reserva.responsavel" [disabled]="reserva.souResponsavel">
+      </div>
+    </div>
+
+    <div class="containerBotao">
+      <button class="btEfetivar" (click)="agendar()">Agendar</button>
+    </div>
+  </div>

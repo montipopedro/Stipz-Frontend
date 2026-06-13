@@ -1,0 +1,185 @@
+:host {
+  display: block;
+}
+
+.reserva-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 4px 22px;
+  align-items: start;
+}
+
+.field {
+  min-width: 0;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.responsible-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 78px;
+}
+
+.responsible-toggle .switch {
+  margin-top: 2px;
+}
+
+.chairs-panel {
+  align-items: center;
+  background: rgba(70, 146, 160, 0.07);
+  border: 1px solid rgba(70, 146, 160, 0.16);
+  border-radius: 8px;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+}
+
+.chairs-description {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 240px;
+}
+
+.chairs-controls {
+  align-items: end;
+  display: flex;
+  gap: 12px;
+}
+
+.chairs-hint {
+  color: #52686d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chairs-quantity {
+  min-width: 300px;
+}
+
+.chairs-quantity .campo {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .chairs-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .chairs-controls {
+    align-items: center;
+  }
+
+  .chairs-quantity {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.campo {
+  margin-bottom: 18px;
+}
+
+.chip-list {
+  min-height: 42px;
+  align-items: center;
+}
+
+.recursos-reserva-list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.recurso-reserva-item {
+  align-items: center;
+  background: rgba(70, 146, 160, 0.05);
+  border: 1px solid rgba(70, 146, 160, 0.14);
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 10px 12px;
+}
+
+.recurso-reserva-item .chip {
+  margin: 0;
+}
+
+.recurso-identificacao {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.recurso-identificacao span {
+  color: #276b76;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.recurso-identificacao small {
+  color: #52686d;
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.recurso-quantidade {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.recurso-quantidade span {
+  color: #52686d;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.recurso-quantidade .campo {
+  margin: 0;
+  min-height: 36px;
+  width: 92px;
+}
+
+:host-context(.dark-mode) .recurso-reserva-item {
+  background: rgba(107, 182, 195, 0.08);
+  border-color: #294047;
+}
+
+:host-context(.dark-mode) .recurso-quantidade span {
+  color: #9bb0b5;
+}
+
+:host-context(.dark-mode) .recurso-identificacao span {
+  color: #9bd0d9;
+}
+
+:host-context(.dark-mode) .recurso-identificacao small {
+  color: #9bb0b5;
+}
+
+@media (max-width: 980px) {
+  .reserva-form {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .recurso-reserva-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

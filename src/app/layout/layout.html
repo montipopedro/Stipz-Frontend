@@ -1,0 +1,98 @@
+<div class="containerGeral">
+  <aside class="quadradoEsquerda">
+    <img src="assets/img/logo-stipz-display.png" id="imgLogo" alt="Stipz">
+
+    <div class="menu-section" *ngIf="auth.isAdmin()">
+      <div class="menu-label">Administração</div>
+
+      <a class="btPadrao" routerLink="/usuario" routerLinkActive="ativo" title="Cadastrar usuário">
+        <img src="assets/img/usuario.png" id="imgPadrao" alt="">
+        Cadastrar usuário
+      </a>
+
+      <a class="btPadrao" routerLink="/sala" routerLinkActive="ativo" title="Cadastrar sala">
+        <img src="assets/img/salaReuniao.png" id="imgPadrao" alt="">
+        Cadastrar sala
+      </a>
+
+      <a class="btPadrao" routerLink="/recurso" routerLinkActive="ativo" title="Cadastrar recurso">
+        <img src="assets/img/reservas.png" id="imgPadrao" alt="">
+        Cadastrar recurso
+      </a>
+
+      <a class="btPadrao" routerLink="/relatorio" routerLinkActive="ativo" title="Gerar relatório">
+        <img src="assets/img/relatorio.png" id="imgPadrao" alt="">
+        Gerar relatório
+      </a>
+
+      <a class="btPadrao" routerLink="/pendentes" routerLinkActive="ativo" title="Reservas pendentes">
+        <img src="assets/img/Menu.png" id="imgPadrao" alt="">
+        Reservas pendentes
+      </a>
+    </div>
+
+    <div class="menu-section">
+      <div class="menu-label" *ngIf="auth.isAdmin()">Operação</div>
+
+      <a class="btPadrao" routerLink="/reservar" routerLinkActive="ativo" title="Reservar sala/recurso">
+        <img src="assets/img/reservas.png" id="imgPadrao" alt="">
+        Reservar sala
+      </a>
+
+      <a class="btPadrao" routerLink="/evento" routerLinkActive="ativo" title="Reservar evento">
+        <img src="assets/img/evento.png" id="imgPadrao" alt="">
+        Reservar evento
+      </a>
+
+      <a class="btPadrao" routerLink="/cancelar" routerLinkActive="ativo" title="Excluir reserva">
+        <img src="assets/img/cancelar.png" id="imgPadrao" alt="">
+        Excluir reserva
+      </a>
+
+      <a class="btPadrao" routerLink="/agendamentos" routerLinkActive="ativo" title="Minhas reservas">
+        <img src="assets/img/agendamentos.png" id="imgPadrao" alt="">
+        Minhas reservas
+      </a>
+    </div>
+
+    <div class="menu-footer">
+      <button class="btPadrao theme-toggle" type="button" (click)="alternarTema()" title="Alternar modo escuro">
+        <span class="theme-icon">{{ theme.modoEscuro ? 'C' : 'D' }}</span>
+        {{ theme.modoEscuro ? 'Modo claro' : 'Modo escuro' }}
+      </button>
+
+      <button class="btSair" (click)="sair()">
+        <img src="assets/img/sair.png" id="imgSair" alt="">
+        SAIR
+      </button>
+    </div>
+  </aside>
+
+  <main class="container" [class.container-compacto]="modoCompacto">
+    <header class="topbar">
+      <div class="perfil-box" title="Usuário logado">
+        <span class="perfil-icone">
+          <img src="assets/img/usuario.png" alt="">
+        </span>
+        <span class="perfil-nome">{{ nomeUsuario }}</span>
+      </div>
+    </header>
+
+    <section class="conteudo-rota">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+
+</div>
+
+<div class="welcome-overlay" [class.saindo]="boasVindasSaindo" *ngIf="mostrarBoasVindas">
+  <div class="welcome-popup">
+    <div class="welcome-icon">
+      <img src="assets/img/usuario.png" alt="">
+    </div>
+    <div>
+      <div class="welcome-title">Bem-vindo, {{ nomeUsuario }}</div>
+      <div class="welcome-subtitle">Sessão iniciada com sucesso</div>
+    </div>
+  </div>
+</div>

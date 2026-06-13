@@ -1,0 +1,135 @@
+:host {
+  display: block;
+}
+
+.feedback {
+  border-radius: 8px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+}
+
+.feedback.sucesso {
+  background: #e7f5ed;
+  border: 1px solid #b7ddc6;
+  color: #1f6d3d;
+}
+
+.feedback.erro {
+  background: #fde8ea;
+  border: 1px solid #efbbc1;
+  color: #a92733;
+}
+
+.reserva-linha {
+  align-items: center;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  padding: 14px 4px;
+}
+
+.reserva-linha + .reserva-linha {
+  border-top: 1px solid #dce9ec;
+}
+
+.reserva-grupo {
+  background: #f8fbfc;
+  border: 1px solid #dce9ec;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+.grupo-header {
+  align-items: center;
+  border-bottom: 1px solid #dce9ec;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 8px 4px 12px;
+}
+
+.grupo-titulo {
+  color: #172326;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.grupo-motivo {
+  color: #52686d;
+  font-size: 13px;
+  max-width: 55%;
+  text-align: right;
+}
+
+.reserva-conteudo {
+  min-width: 0;
+}
+
+.reserva-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.reserva-acoes .btEfetivar,
+.reserva-acoes .btSecundario {
+  min-width: 96px;
+}
+
+:host-context(.dark-mode) .feedback.sucesso {
+  background: rgba(43, 138, 89, 0.16);
+  border-color: rgba(92, 176, 126, 0.35);
+  color: #a9dfbd;
+}
+
+:host-context(.dark-mode) .feedback.erro {
+  background: rgba(189, 74, 84, 0.16);
+  border-color: rgba(230, 122, 131, 0.35);
+  color: #ffc5ca;
+}
+
+:host-context(.dark-mode) .reserva-grupo {
+  background: #101d21;
+  border-color: #294047;
+}
+
+:host-context(.dark-mode) .reserva-linha + .reserva-linha,
+:host-context(.dark-mode) .grupo-header {
+  border-color: #294047;
+}
+
+:host-context(.dark-mode) .grupo-titulo {
+  color: #f2f7f8;
+}
+
+:host-context(.dark-mode) .grupo-motivo {
+  color: #9bb0b5;
+}
+
+@media (max-width: 780px) {
+  .reserva-linha {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .reserva-acoes {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .reserva-acoes .btEfetivar,
+  .reserva-acoes .btSecundario {
+    flex: 1;
+  }
+
+  .grupo-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .grupo-motivo {
+    max-width: none;
+    text-align: left;
+  }
+}

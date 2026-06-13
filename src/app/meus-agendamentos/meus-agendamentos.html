@@ -1,0 +1,44 @@
+  <div class="titulo">Meus agendamentos</div>
+
+  <div class="quadrado">
+    <div *ngIf="gruposReservas.length === 0" class="empty-state">
+      Você ainda não possui agendamentos
+    </div>
+
+    <div class="lista-reservas" *ngIf="gruposReservas.length > 0">
+      <section class="reserva-grupo" *ngFor="let grupo of gruposReservas">
+        <header class="grupo-header" *ngIf="grupo.evento">
+          <div>
+            <div class="grupo-titulo">{{ grupo.evento }}</div>
+            <div class="reserva-detalhe">Evento com {{ grupo.reservas.length }} sala{{ grupo.reservas.length === 1 ? '' : 's' }}</div>
+          </div>
+        </header>
+
+        <div class="reserva-linha" *ngFor="let reserva of grupo.reservas">
+          <div class="reserva-icone">✓</div>
+          <div>
+            <div class="reserva-titulo">{{ reserva.sala }}</div>
+            <div class="reserva-detalhe">{{ reserva.data | date:'dd/MM/yyyy' }} - {{ reserva.horaInicio }} / {{ reserva.horaFim }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.responsavel">Responsável: {{ reserva.responsavel }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.recursos.length">Recursos: {{ reserva.recursos.join(', ') }}</div>
+            <div class="reserva-detalhe" *ngIf="reserva.cadeirasExtras">
+              Cadeiras extras solicitadas: {{ reserva.quantidadeCadeiras }}
+            </div>
+            <div class="reserva-detalhe motivo-rejeicao" *ngIf="(reserva.status === 'REJEITADA' || reserva.status === 'RECUSADA') && reserva.motivoRejeicao">
+              Motivo da rejeição: {{ reserva.motivoRejeicao }}
+            </div>
+          </div>
+          <div class="reserva-acoes">
+            <span class="reserva-status">{{ reserva.status }}</span>
+            <button
+              class="btEditarReserva"
+              type="button"
+              *ngIf="podeEditarReservaEvento(reserva)"
+              (click)="solicitarEdicao(grupo, reserva)">
+              Editar reserva
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>

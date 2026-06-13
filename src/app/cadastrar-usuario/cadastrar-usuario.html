@@ -1,0 +1,29 @@
+  <div class="titulo">Cadastrar usuário</div>
+
+  <div class="quadrado">
+    <div class="form-grid">
+      <div class="span-2">
+        <label class="texto">Nome</label>
+        <input class="campo" type="text" [(ngModel)]="usuario.nome" (input)="limparMensagens()">
+      </div>
+
+      <div>
+        <label class="texto">Email</label>
+        <input class="campo" type="email" [(ngModel)]="usuario.email" (input)="limparMensagens()">
+      </div>
+
+      <div>
+        <label class="texto">Senha</label>
+        <input class="campo" type="password" [(ngModel)]="usuario.senha" (input)="limparMensagens()">
+      </div>
+    </div>
+
+    <div class="containerBotao">
+      <button
+        class="btEfetivar"
+        (click)="cadastrar()"
+        [disabled]="carregando || !usuario.nome || !usuario.email || !usuario.senha">
+        Cadastrar
+      </button>
+    </div>
+  </div>
